@@ -5,25 +5,37 @@ class Solution(object):
         :type t: str
         :rtype: bool
         """
-        # Have two dicts to keep track of each character
-        hashmapS, hashmapT = {}, {}
+        """
+        # O(n)
+        # Hashmap Solution using only 1 dict
+        count = {}
         
-        # If the two strings doesn't have equal num of characters, then it's not an anagram
         if len(s) != len(t):
             return False
         
-        # Iterate through each of the characters 
         for i in range(len(s)):
-            # Make a key for each character
-            # Use get() to increment if the key already exists, or set to (1 + 0) if it doesn't
-            hashmapS[s[i]] = 1 + hashmapS.get(s[i], 0)
-            hashmapT[t[i]] = 1 + hashmapT.get(t[i], 0)
-
-        # Check all of the keys of a dict and compare it to the other
-        # If one of them aren't equal then it's not an anagram
-        # get() is used in case there's a character in one string that doesn't exist on the other string
-        for c in hashmapS:
-            if hashmapS[c] != hashmapT.get(c, 0):
-                return False
+            count[s[i]] = 1 + count.get(s[i], 0)
+            count[t[i]] = count.get(t[i], 0) - 1
             
+        for n, c in count.items():
+            if c != 0:
+                return False
+        return True
+        """
+
+        # O(n) time and O(1) space solution
+        # Array Solution with ord()
+
+        count = [0] * 26
+
+        if len(s) != len(t):
+            return False
+
+        for i in range(len(s)):
+            count[ord(s[i]) - ord('a')] += 1
+            count[ord(t[i]) - ord('a')] -= 1
+
+        for num in count:
+            if num != 0:
+                return False
         return True
